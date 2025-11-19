@@ -13,19 +13,79 @@ document.addEventListener("DOMContentLoaded", () => {
       // Clear loading message
       activitiesList.innerHTML = "";
 
-      // Populate activities list
+      // small helper to avoid injecting raw HTML
+      function escapeHtml(str) {
+        return String(str || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      // Populate activities list with participants section
       Object.entries(activities).forEach(([name, details]) => {
         const activityCard = document.createElement("div");
         activityCard.className = "activity-card";
 
-        const spotsLeft = details.max_participants - details.participants.length;
+        const participantsArray = Array.isArray(details.participants) ? details.participants : [];
+        const spotsLeft = details.max_participants - participantsArray.length;
 
         activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <div class="activity-main">
+            <h4 class="activity-title">${escapeHtml(name)}</h4>
+            <p class="activity-desc">${escapeHtml(details.description)}</p>
+            <p class="activity-meta"><strong>Schedule:</strong> ${escapeHtml(details.schedule)}</p>
+            <p class="activity-meta"><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          </div>
         `;
+
+        // Participants section (bulleted list with small badges)
+        const participantsSection = document.createElement("div");
+        participantsSection.className = "participants-section";
+
+        const participantsTitle = document.createElement("h5");
+        participantsTitle.className = "participants-title";
+        participantsTitle.textContent = "Participants";
+        participantsSection.appendChild(participantsTitle);
+
+        const ul = document.createElement("ul");
+        ul.className = "participants-list";
+
+        if (participantsArray.length > 0) {
+          participantsArray.forEach((email) => {
+            const li = document.createElement("li");
+            li.className = "participant-item";
+
+            const badge = document.createElement("span");
+            badge.className = "participant-badge";
+            // create simple initials from local-part for a visual badge
+            const initials = String(email)
+              .split("@")[0]
+              .split(/[\.\-_]/)
+              .map(s => s[0] || "")
+              .join("")
+              .slice(0, 2)
+              .toUpperCase();
+            badge.textContent = initials;
+
+            const emailSpan = document.createElement("span");
+            emailSpan.className = "participant-email";
+            emailSpan.textContent = email;
+
+            li.appendChild(badge);
+            li.appendChild(emailSpan);
+            ul.appendChild(li);
+          });
+        } else {
+          const li = document.createElement("li");
+          li.className = "participant-empty muted";
+          li.textContent = "No participants yet";
+          ul.appendChild(li);
+        }
+
+        participantsSection.appendChild(ul);
+        activityCard.appendChild(participantsSection);
 
         activitiesList.appendChild(activityCard);
 
