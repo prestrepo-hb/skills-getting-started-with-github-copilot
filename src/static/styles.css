@@ -142,3 +142,109 @@ footer {
   padding: 20px;
   color: #666;
 }
+
+/* Participants section styling */
+.participants-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #eee;
+}
+
+.participants-title {
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* remove default list styling but keep semantic list for accessibility */
+.participants-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* each participant row */
+.participant-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(250,250,250,0.6));
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.04);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+  font-size: 0.95rem;
+}
+
+/* circular initials badge */
+.participant-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #1a237e;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex: 0 0 34px;
+  box-shadow: 0 2px 6px rgba(26,35,126,0.12);
+}
+
+/* email text (truncated if long) */
+.participant-email {
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* allow email to take remaining space and keep delete button to the right */
+.participant-email {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* delete (unregister) button */
+.participant-delete {
+  background: transparent;
+  border: none;
+  color: #c62828;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.participant-delete:hover {
+  background: rgba(198,40,40,0.08);
+}
+
+/* subtle muted text for empty state */
+.muted {
+  color: #777;
+  font-style: italic;
+  padding: 8px 10px;
+}
+
+/* small screens: tighten spacing */
+@media (max-width: 480px) {
+  .participant-item {
+    gap: 8px;
+    padding: 6px 8px;
+    font-size: 0.9rem;
+  }
+
+  .participant-badge {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    font-size: 0.85rem;
+  }
+}
